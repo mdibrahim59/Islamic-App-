@@ -1,43 +1,23 @@
-name: Build Android APK
 
-on:
-  push:
-    branches: [ "main" ]
-  workflow_dispatch:
+import streamlit as st
+from groq import Groq
 
-jobs:
-  build:
-    runs-on: ubuntu-22.04
+st.title("🕌 Islamic Assistant App")
 
-    steps:
-      - uses: actions/checkout@v3
+api_key = st.text_input("Groq API Key দিন:", type="password")
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'zulu'
-          java-version: '17'
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential libssl-dev libffi-dev python3-dev zip unzip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libreadline-dev libsqlite3-dev libgdbm-dev libdb5.3-dev libbz2-dev libexpat1-dev liblzma-dev tk-dev
-          pip install --upgrade pip
-          pip install buildozer cython==0.29.33
-
-      - name: Build APK
-        run: |
-          yes | buildozer init
-          sed -i 's/requirements = python3,kivy/requirements = python3,kivy,groq,httpx,anyio,pydantic,typing_extensions/g' buildozer.spec
-          buildozer -v android debug
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v3
-        with:
-          name: app-release
-          path: bin/*.apk
+if api_key:
+    client = Groq(api_key=api_key)
+    user_query = st.text_area("আপনার প্রশ্ন লিখুন:")
+    
+    if st.button("উত্তর দিন"):
+        if user_query:
+            try:
+                chat_completion = client.chat.completions.create(
+                    messages=[{"role": "user", "content": user_query}],
+                    model="llama3-8b-8192",
+                )
+                st.write("### উত্তর:")
+                st.success(chat_completion.choices[0].message.content)
+            except Exception as e:
+                st.error(f"ভুল হয়েছে: {e}")
