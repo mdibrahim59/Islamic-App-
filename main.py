@@ -9,7 +9,7 @@ st.set_page_config(
 )
 
 # 2. অ্যাপের হেডার বা টাইটেল
-st.markdown("<h1 style='text-align: center; color: #008000;'>🕌 সহীহ ইসলামিক ইনফো 🕌</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; color: #008000;'>🕌 ইসলামিক সহীহ তথ্য  🕌</h1>", unsafe_allow_html=True)
 st.markdown("---")
 st.write("<h5 style='text-align: center;'>আপনার যেকোনো ইসলামিক প্রশ্নের নির্ভরযোগ্য উত্তর পেতে নিচে প্রশ্ন লিখুন।</h5>", unsafe_allow_html=True)
 st.write("") 
