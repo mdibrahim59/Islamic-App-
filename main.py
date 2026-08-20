@@ -38,7 +38,7 @@ if st.button("🔍 উত্তর দিন"):
                             "content": user_query,
                         }
                     ],
-                   model="llama-3.1-8b-instant" 
+                   model="llama-3.1-8b-instant",
                     temperature=0.5,
                     max_tokens=2048
                 )
