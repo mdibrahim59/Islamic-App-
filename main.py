@@ -2,9 +2,9 @@ import streamlit as st
 from groq import Groq
 
 # পেজ সেটআপ
-st.set_page_config(page_title="Islamic App", page_icon="🕌")
+st.set_page_config(page_title="ইসলামিক সহীহ তথ্য ", page_icon="🕌")
 
-st.title("🕌 Islamic Assistant App")
+st.title("🕌 Islamic ইসলামিক সহীহ তথ্য ")
 st.write("আপনার প্রশ্নের উত্তর পেতে নিচে Groq API Key দিন এবং প্রশ্ন লিখুন।")
 
 # API Key ইনপুট
