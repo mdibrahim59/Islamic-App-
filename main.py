@@ -3,7 +3,7 @@ from groq import Groq
 
 # 1. পেজ কনফিগারেশন এবং লোগো সেটআপ
 st.set_page_config(
-    page_title="সহীহ ইসলামিক ইনফো", 
+    page_title="ইসলামিক সহীহ তথ্য", 
     page_icon="🕌", 
     layout="centered"
 )
