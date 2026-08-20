@@ -25,8 +25,7 @@ if st.button("🔍 উত্তর দিন"):
     else:
         try:
             # এখানে আপনার Groq API Key টি বসিয়ে দেওয়া হয়েছে, তাই কাউকে আলাদা করে দিতে হবে না
-            client = Groq(api_key="আপনার_আসল_এপিআই_কি_এখানে_বসান")
-            
+            client = Groq(api_key=st.secrets["GROQ_API_KEY"])
             with st.spinner("🕌 ইসলামিক তথ্য অনুসন্ধান করা হচ্ছে... দয়া করে অপেক্ষা করুন।"):
                 chat_completion = client.chat.completions.create(
                     messages=[
