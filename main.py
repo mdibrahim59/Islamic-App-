@@ -25,7 +25,7 @@ if st.button("উত্তর দিন"):
             with st.spinner("উত্তর তৈরি করা হচ্ছে..."):
                 chat_completion = client.chat.completions.create(
                     messages=[{"role": "user", "content": user_query}],
-                    model="llama-3.1-8b-instant"
+                    model="openai/gpt-oss-20b"
                 )
                 st.write("### 📖 উত্তর:")
                 st.success(chat_completion.choices[0].message.content)
