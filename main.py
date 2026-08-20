@@ -38,9 +38,9 @@ if st.button("🔍 উত্তর দিন"):
                             "content": user_query,
                         }
                     ],
-                   model="llama-3.1-8b-instant",
+                   model="openai/gpt-oss-20b",
                     temperature=0.5,
-                    max_tokens=2048
+                    max_tokens=4096
                 )
                 
                 bot_response = chat_completion.choices[0].message.content
