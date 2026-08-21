@@ -8,15 +8,15 @@ st.set_page_config(
     layout="centered"
 )
 
-# ব্যাকগ্রাউন্ড পুরোপুরি কালো করার জন্য সাধারণ CSS
+# পুরো মোবাইল স্ক্রিন জুড়ে ব্যাকগ্রাউন্ড ছবি সেট করার জন্য CSS স্টাইল
 st.markdown("""
 <style>
 .stApp {
-    background-color: #000000;
-}
-/* সমস্ত টেক্সট সাদা করা যাতে কালো ব্যাকগ্রাউন্ডে স্পষ্টভাবে দেখা যায় */
-h1, h5, p, span, label {
-    color: #FFFFFF !important;
+    background-image: url('https://i.ibb.co/6P6X9K3/islamic-bg.jpg');
+    background-size: cover;          
+    background-position: center;     
+    background-repeat: no-repeat;    
+    background-attachment: fixed;    
 }
 </style>
 """, unsafe_allow_html=True)
@@ -74,7 +74,7 @@ if user_query := st.chat_input("যেমন: জুমার নামাজে
         # 5. বটের উত্তর হিস্ট্রি ও স্ক্রিনে যোগ করা
         st.session_state.messages.append({"role": "assistant", "content": bot_response})
         with st.chat_message("assistant"):
-            st.markdown(f"<div style='background-color: #1a1a1a; padding: 20px; border-radius: 10px; color: white !important;'>{bot_response}</div>", unsafe_allow_html=True)
+            st.markdown(f"<div style='background-color: #f0f2f6; padding: 20px; border-radius: 10px; color: black;'>{bot_response}</div>", unsafe_allow_html=True)
             st.markdown("---")
             st.caption("বি:দ্র: এই উত্তরটি কৃত্রিম বুদ্ধিমত্তা (AI) দ্বারা তৈরি। চূড়ান্ত ফতোয়ার জন্য কোনো বিজ্ঞ আলেমের পরামর্শ নেওয়া উচিত।")
 
