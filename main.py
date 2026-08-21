@@ -56,10 +56,10 @@ if user_query := st.chat_input("যেমন: জুমার নামাজে
             for m in st.session_state.messages:
                 messages_payload.append({"role": m["role"], "content": m["content"]})
 
-            # এখানে মডেলের নাম পরিবর্তন করে সঠিক ও কার্যকারী মডেল দেওয়া হয়েছে
+            # সঠিক এবং বর্তমান কার্যকারী মডেল নাম
             chat_completion = client.chat.completions.create(
                 messages=messages_payload,
-                model="llama-3.3-70b-versatile",
+                model="llama-3.1-8b-instant",
                 temperature=0.5,
                 max_tokens=4096
             )
