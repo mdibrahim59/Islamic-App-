@@ -56,10 +56,10 @@ if user_query := st.chat_input("যেমন: জুমার নামাজে
             for m in st.session_state.messages:
                 messages_payload.append({"role": m["role"], "content": m["content"]})
 
-            # সঠিক এবং বর্তমান কার্যকারী মডেল নাম
+            # Groq এর বর্তমান সঠিক মডেল আইডি
             chat_completion = client.chat.completions.create(
                 messages=messages_payload,
-                model="llama-3.1-8b-instant",
+                model="openai/gpt-oss-20b",
                 temperature=0.5,
                 max_tokens=4096
             )
