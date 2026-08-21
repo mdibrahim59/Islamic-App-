@@ -12,7 +12,7 @@ st.set_page_config(
 st.markdown("""
 <style>
 .stApp {
-    background-image: url('https://i.ibb.co/6P6X9K3/islamic-bg.jpg'); /* আপনার পছন্দমতো ছবির লিংক এখানে দিতে পারেন */
+    background-image: url('https://i.ibb.co/6P6X9K3/islamic-bg.jpg');
     background-size: cover;          
     background-position: center;     
     background-repeat: no-repeat;    
@@ -27,7 +27,7 @@ st.markdown("---")
 st.write("<h5 style='text-align: center;'>আপনার যেকোনো ইসলামিক প্রশ্নের নির্ভরযোগ্য উত্তর পেতে নিচে চ্যাট করুন।</h5>", unsafe_allow_html=True)
 st.write("") 
 
-# 3. চ্যাট হিস্ট্রি বা মেমোরি তৈরি করা (যাতে আগের লেখা মুছে না যায়)
+# 3. চ্যাট হিস্ট্রি বা মেমোরি তৈরি করা
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
@@ -36,21 +36,18 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# 4. মূল চ্যাট ইনপুট বক্স (নিচে থাকবে এবং আগের লেখা মুছে যাবে না)
+# 4. মূল চ্যাট ইনপুট বক্স
 if user_query := st.chat_input("যেমন: জুমার নামাজের ফজিলত সম্পর্কে বলুন।"):
     
-    # ইউজারের মেসেজ হিস্ট্রিতে যোগ করা এবং দেখানো
     st.session_state.messages.append({"role": "user", "content": user_query})
     with st.chat_message("user"):
         st.markdown(user_query)
 
     try:
-        # ক্লায়েন্ট ইনিশিয়ালাইজেশন (আপনার সিক্রেট কি সহ)
         client = Groq(api_key=st.secrets["GROQ_API_KEY"])
         
         with st.spinner("🕌 ইসলামিক তথ্য অনুসন্ধান করা হচ্ছে... দয়া করে অপেক্ষা করুন।"):
             
-            # সিস্টেম প্রম্পট এবং পুরো চ্যাট হিস্ট্রি একসাথে এআই-এর কাছে পাঠানো
             messages_payload = [
                 {
                     "role": "system",
@@ -58,20 +55,19 @@ if user_query := st.chat_input("যেমন: জুমার নামাজে
                 }
             ]
             
-            # আগের কথোপকথনগুলো যোগ করা
             for m in st.session_state.messages:
                 messages_payload.append({"role": m["role"], "content": m["content"]})
 
+            # Groq এর বর্তমান সচল সঠিক মডেল
             chat_completion = client.chat.completions.create(
                 messages=messages_payload,
-                model="llama3-70b-8192",
+                model="openai/gpt-oss-20b",
                 temperature=0.5,
                 max_tokens=4096
             )
             
             bot_response = chat_completion.choices[0].message.content
         
-        # 5. বটের উত্তর হিস্ট্রি ও স্ক্রিনে যোগ করা
         st.session_state.messages.append({"role": "assistant", "content": bot_response})
         with st.chat_message("assistant"):
             st.markdown(f"<div style='background-color: #f0f2f6; padding: 20px; border-radius: 10px; color: black;'>{bot_response}</div>", unsafe_allow_html=True)
