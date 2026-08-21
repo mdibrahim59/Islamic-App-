@@ -8,23 +8,13 @@ st.set_page_config(
     layout="wide"
 )
 
-# ডিজাইন এবং চ্যাট বক্স ঠিক করার জন্য CSS
+# লেআউট ঠিক করার জন্য CSS
 st.markdown("""
 <style>
 .block-container {
     max-width: 98% !important;
     padding-top: 2rem;
     padding-bottom: 5rem;
-}
-/* চ্যাট বক্সের ভেতরে টেবিল বা লেখা যেন সুন্দরভাবে ফিট হয় */
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-th, td {
-    padding: 8px;
-    text-align: right;
-    border: 1px solid #ddd;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -42,7 +32,7 @@ if "messages" not in st.session_state:
 # আগের সব চ্যাট স্ক্রিনে দেখানো
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
-        st.markdown(message["content"], unsafe_allow_html=True)
+        st.markdown(message["content"])
 
 # 4. মূল চ্যাট ইনপুট বক্স
 if user_query := st.chat_input("যেমন: জুমার নামাজের ফজিলত সম্পর্কে বলুন..."):
@@ -59,16 +49,17 @@ if user_query := st.chat_input("যেমন: জুমার নামাজে
             messages_payload = [
                 {
                     "role": "system",
-                    "content": "আপনি একজন অত্যন্ত জ্ঞানী ও নির্ভরযোগ্য ইসলামিক স্কলার বা আলেম। আপনি কোরআন ও হাদিসের সঠিক রেফারেন্স ব্যবহার করে ব্যবহারকারীর প্রশ্নের উত্তর দেবেন। আপনার ভাষা হবে অত্যন্ত বিনয়ী, জ্ঞানগর্ভ এবং সহজবোধ্য। উত্তর দেওয়ার সময় সর্বদা সালাম দেবেন এবং শেষে দোয়া করবেন। যখন তালিকার মতো বড় ডেটা (যেমন আল্লাহর ৯৯ টি নাম) দেবেন, তখন তা Markdown টেবিল আকারে সুন্দরভাবে সাজিয়ে দেবেন যেন মোবাইলে পড়তে সমস্যা না হয়।",
+                    "content": "আপনি একজন অত্যন্ত জ্ঞানী ও নির্ভরযোগ্য ইসলামিক স্কলার বা আলেম। আপনি কোরআন ও হাদিসের সঠিক রেফারেন্স ব্যবহার করে ব্যবহারকারীর প্রশ্নের উত্তর দেবেন। আপনার ভাষা হবে অত্যন্ত বিনয়ী, জ্ঞানগর্ভ এবং সহজবোধ্য। উত্তর দেওয়ার সময় সর্বদা সালাম দেবেন এবং শেষে দোয়া করবেন।",
                 }
             ]
             
             for m in st.session_state.messages:
                 messages_payload.append({"role": m["role"], "content": m["content"]})
 
+            # এখানে মডেলের নাম পরিবর্তন করে সঠিক ও কার্যকারী মডেল দেওয়া হয়েছে
             chat_completion = client.chat.completions.create(
                 messages=messages_payload,
-                model="openai/gpt-oss-20b",
+                model="llama-3.3-70b-versatile",
                 temperature=0.5,
                 max_tokens=4096
             )
@@ -77,7 +68,7 @@ if user_query := st.chat_input("যেমন: জুমার নামাজে
         
         st.session_state.messages.append({"role": "assistant", "content": bot_response})
         with st.chat_message("assistant"):
-            st.markdown(bot_response, unsafe_allow_html=True)
+            st.markdown(bot_response)
             st.markdown("---")
             st.caption("বি:দ্র: এই উত্তরটি কৃত্রিম বুদ্ধিমত্তা (AI) দ্বারা তৈরি। চূড়ান্ত ফতোয়ার জন্য কোনো বিজ্ঞ আলেমের পরামর্শ নেওয়া উচিত।")
 
