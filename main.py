@@ -5,22 +5,17 @@ from groq import Groq
 st.set_page_config(
     page_title="ইসলামিক সহীহ তথ্য", 
     page_icon="🕌", 
-    layout="wide"
+    layout="centered"
 )
 
-# পুরো স্ক্রিন জুড়ে কালো ব্যাকগ্রাউন্ড এবং আপনার আগের ডিজাইনের সিএসএস
+# ব্যাকগ্রাউন্ড পুরোপুরি কালো করার জন্য সাধারণ CSS
 st.markdown("""
 <style>
 .stApp {
     background-color: #000000;
 }
-.block-container {
-    max-width: 95% !important;
-    padding-top: 2rem;
-    padding-bottom: 5rem;
-}
-/* আগের মতো টেক্সট কালার */
-h1, h5, p, div {
+/* সমস্ত টেক্সট সাদা করা যাতে কালো ব্যাকগ্রাউন্ডে স্পষ্টভাবে দেখা যায় */
+h1, h5, p, span, label {
     color: #FFFFFF !important;
 }
 </style>
@@ -32,7 +27,7 @@ st.markdown("---")
 st.write("<h5 style='text-align: center;'>আপনার যেকোনো ইসলামিক প্রশ্নের নির্ভরযোগ্য উত্তর পেতে নিচে চ্যাট করুন।</h5>", unsafe_allow_html=True)
 st.write("") 
 
-# 3. চ্যাট হিস্ট্রি বা মেমোরি তৈরি করা
+# 3. চ্যাট হিস্ট্রি বা মেমোরি তৈরি করা (যাতে আগের লেখা মুছে না যায়)
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
@@ -41,7 +36,7 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# 4. মূল চ্যাট ইনপুট বক্স
+# 4. মূল চ্যাট ইনপুট বক্স (নিচে থাকবে এবং আগের লেখা মুছে যাবে না)
 if user_query := st.chat_input("যেমন: জুমার নামাজের ফজিলত সম্পর্কে বলুন।"):
     
     # ইউজারের মেসেজ হিস্ট্রিতে যোগ করা এবং দেখানো
@@ -50,12 +45,12 @@ if user_query := st.chat_input("যেমন: জুমার নামাজে
         st.markdown(user_query)
 
     try:
-        # ক্লায়েন্ট ইনিশিয়ালাইজেশন
+        # ক্লায়েন্ট ইনিশিয়ালাইজেশন (আপনার সিক্রেট কি সহ)
         client = Groq(api_key=st.secrets["GROQ_API_KEY"])
         
         with st.spinner("🕌 ইসলামিক তথ্য অনুসন্ধান করা হচ্ছে... দয়া করে অপেক্ষা করুন।"):
             
-            # সিস্টেম প্রম্পট (আপনার আগেরটা)
+            # সিস্টেম প্রম্পট এবং পুরো চ্যাট হিস্ট্রি একসাথে এআই-এর কাছে পাঠানো
             messages_payload = [
                 {
                     "role": "system",
@@ -79,7 +74,7 @@ if user_query := st.chat_input("যেমন: জুমার নামাজে
         # 5. বটের উত্তর হিস্ট্রি ও স্ক্রিনে যোগ করা
         st.session_state.messages.append({"role": "assistant", "content": bot_response})
         with st.chat_message("assistant"):
-            st.markdown(f"<div style='background-color: #f0f2f6; padding: 20px; border-radius: 10px; color: black !important;'>{bot_response}</div>", unsafe_allow_html=True)
+            st.markdown(f"<div style='background-color: #1a1a1a; padding: 20px; border-radius: 10px; color: white !important;'>{bot_response}</div>", unsafe_allow_html=True)
             st.markdown("---")
             st.caption("বি:দ্র: এই উত্তরটি কৃত্রিম বুদ্ধিমত্তা (AI) দ্বারা তৈরি। চূড়ান্ত ফতোয়ার জন্য কোনো বিজ্ঞ আলেমের পরামর্শ নেওয়া উচিত।")
 
