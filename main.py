@@ -8,6 +8,19 @@ st.set_page_config(
     layout="centered"
 )
 
+# পুরো মোবাইল স্ক্রিন জুড়ে ব্যাকগ্রাউন্ড ছবি সেট করার জন্য CSS স্টাইল
+st.markdown("""
+<style>
+.stApp {
+    background-image: url('https://i.ibb.co/6P6X9K3/islamic-bg.jpg'); /* আপনার পছন্দমতো ছবির লিংক এখানে দিতে পারেন */
+    background-size: cover;          
+    background-position: center;     
+    background-repeat: no-repeat;    
+    background-attachment: fixed;    
+}
+</style>
+""", unsafe_allow_html=True)
+
 # 2. অ্যাপের হেডার বা টাইটেল
 st.markdown("<h1 style='text-align: center; color: #008000;'>🕌 ইসলামিক সহীহ তথ্য  🕌</h1>", unsafe_allow_html=True)
 st.markdown("---")
@@ -26,7 +39,7 @@ for message in st.session_state.messages:
 # 4. মূল চ্যাট ইনপুট বক্স (নিচে থাকবে এবং আগের লেখা মুছে যাবে না)
 if user_query := st.chat_input("যেমন: জুমার নামাজের ফজিলত সম্পর্কে বলুন।"):
     
-    # ইউজারের মেসেজ হিস্ট्रीতে যোগ করা এবং দেখানো
+    # ইউজারের মেসেজ হিস্ট্রিতে যোগ করা এবং দেখানো
     st.session_state.messages.append({"role": "user", "content": user_query})
     with st.chat_message("user"):
         st.markdown(user_query)
