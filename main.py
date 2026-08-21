@@ -1,22 +1,30 @@
 import streamlit as st
 from groq import Groq
+from PIL import Image
 
-# 1. পেজ কনফিগারেশন এবং লোগো সেটআপ
+# 1. পেজ কনফিগারেশন এবং লোগো সেটআপ (layout="wide" দিয়ে পুরো স্ক্রিন জুড়ে উত্তরের ব্যবস্থা করা হয়েছে)
 st.set_page_config(
     page_title="ইসলামিক সহীহ তথ্য", 
     page_icon="🕌", 
-    layout="centered"
+    layout="wide"
 )
 
-# পুরো মোবাইল স্ক্রিন জুড়ে ব্যাকগ্রাউন্ড ছবি সেট করার জন্য CSS স্টাইল
+# পুরো মোবাইল স্ক্রিন জুড়ে ব্যাকগ্রাউন্ড ছবি ও চ্যাট বক্সের সাইজ ঠিক রাখার জন্য CSS স্টাইল
 st.markdown("""
 <style>
 .stApp {
-    background-image: url('https://i.ibb.co/6P6X9K3/islamic-bg.jpg'); /* আপনার পছন্দমতো ছবির লিংক এখানে দিতে পারেন */
+    background-image: url('https://i.ibb.co/6P6X9K3/islamic-bg.jpg'); 
     background-size: cover;          
     background-position: center;     
     background-repeat: no-repeat;    
     background-attachment: fixed;    
+}
+
+/* কন্টেন্ট পুরো স্ক্রিন জুড়ে চওড়া করার জন্য */
+.block-container {
+    max-width: 95% !important;
+    padding-top: 2rem;
+    padding-bottom: 5rem;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -24,7 +32,7 @@ st.markdown("""
 # 2. অ্যাপের হেডার বা টাইটেল
 st.markdown("<h1 style='text-align: center; color: #008000;'>🕌 ইসলামিক সহীহ তথ্য  🕌</h1>", unsafe_allow_html=True)
 st.markdown("---")
-st.write("<h5 style='text-align: center;'>আপনার যেকোনো ইসলামিক প্রশ্নের নির্ভরযোগ্য উত্তর পেতে নিচে চ্যাট করুন।</h5>", unsafe_allow_html=True)
+st.write("<h5 style='text-align: center;'>আপনার যেকোনো ইসলামিক প্রশ্ন বা ছবি দিয়ে নির্ভরযোগ্য উত্তর নিন।</h5>", unsafe_allow_html=True)
 st.write("") 
 
 # 3. চ্যাট হিস্ট্রি বা মেমোরি তৈরি করা (যাতে আগের লেখা মুছে না যায়)
@@ -36,13 +44,21 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# 4. মূল চ্যাট ইনপুট বক্স (নিচে থাকবে এবং আগের লেখা মুছে যাবে না)
+# ৪. ছবি আপলোড করার অপশন (অ্যাপের ভেতর ছবি বা স্ক্রিনশট দেওয়ার জন্য)
+uploaded_file = st.file_uploader("🖼️ কোনো ছবি বা স্ক্রিনশট দিয়ে প্রশ্ন করতে চাইলে এখানে আপলোড করুন (ঐচ্ছিক):", type=["jpg", "jpeg", "png"])
+if uploaded_file:
+    img = Image.open(uploaded_file)
+    st.image(img, caption="আপলোড করা ছবি", width=250)
+
+# 5. মূল চ্যাট ইনপুট বক্স (নিচে থাকবে এবং আগের লেখা মুছে যাবে না)
 if user_query := st.chat_input("যেমন: জুমার নামাজের ফজিলত সম্পর্কে বলুন।"):
     
     # ইউজারের মেসেজ হিস্ট্রিতে যোগ করা এবং দেখানো
     st.session_state.messages.append({"role": "user", "content": user_query})
     with st.chat_message("user"):
         st.markdown(user_query)
+        if uploaded_file:
+            st.image(img, width=250)
 
     try:
         # ক্লায়েন্ট ইনিশিয়ালাইজেশন (আপনার সিক্রেট কি সহ)
@@ -74,7 +90,7 @@ if user_query := st.chat_input("যেমন: জুমার নামাজে
         # 5. বটের উত্তর হিস্ট্রি ও স্ক্রিনে যোগ করা
         st.session_state.messages.append({"role": "assistant", "content": bot_response})
         with st.chat_message("assistant"):
-            st.markdown(f"<div style='background-color: #f0f2f6; padding: 20px; border-radius: 10px;'>{bot_response}</div>", unsafe_allow_html=True)
+            st.markdown(f"<div style='background-color: rgba(240, 242, 246, 0.9); padding: 20px; border-radius: 10px;'>{bot_response}</div>", unsafe_allow_html=True)
             st.markdown("---")
             st.caption("বি:দ্র: এই উত্তরটি কৃত্রিম বুদ্ধিমত্তা (AI) দ্বারা তৈরি। চূড়ান্ত ফতোয়ার জন্য কোনো বিজ্ঞ আলেমের পরামর্শ নেওয়া উচিত।")
 
