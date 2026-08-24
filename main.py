@@ -90,8 +90,7 @@ if user_query := st.chat_input("যেমন: ইস্তিগফারের 
             # Groq API কল করা (সঠিক ও আপডেট মডেল নাম ব্যবহার করা হয়েছে)
             chat_completion = client.chat.completions.create(
                 messages=messages_payload,
-                model="gemma2-9b-it",
-
+                model="openai/gpt-oss-20b",
                 temperature=0.5,
                 max_tokens=4096
             )
