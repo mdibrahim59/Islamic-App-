@@ -90,7 +90,7 @@ if user_query := st.chat_input("যেমন: ইস্তিগফারের 
             # Groq API কল করা (সঠিক ও আপডেট মডেল নাম ব্যবহার করা হয়েছে)
             chat_completion = client.chat.completions.create(
                 messages=messages_payload,
-                model="llama3-8b-8192",
+                model="llama-3.1-8b-instant",
                 temperature=0.5,
                 max_tokens=4096
             )
